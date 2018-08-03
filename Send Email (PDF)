@@ -1,0 +1,50 @@
+Public Function SendEMail(Attachment1 As String, Attachment2 As String, DatePart As String)
+
+'Variable Declarations
+Dim MyOutlook As Outlook.Application
+Dim MyMail As Outlook.MailItem
+Dim Subjectline As String
+Dim MyBodyText As String
+
+
+'Variable Assignments
+Subjectline$ = "AIS Staff Phone Lists Updated"
+
+MyBodyText = "The AIS Staff Phone Lists have been updated and are available at J:\Share\Department Phone Lists\ "
+MyBodyText = MyBodyText & vbCrLf & "Please note that the AIS Staff Directory is also available online in a sortable format at  https://ais.msu.edu/aboutais/staffdirectory.asp"
+MyBodyText = MyBodyText & vbCrLf
+MyBodyText = MyBodyText & vbCrLf & "Thank you." & vbCrLf & "AIS Administrative Services"
+
+' Open Outlook 
+Set MyOutlook = New Outlook.Application
+
+' Create the Email object
+Set MyMail = MyOutlook.CreateItem(olMailItem)
+
+' Set the Parameters
+MyMail.To = "AIS.STAFF@ais.msu.edu"
+MyMail.Subject = Subjectline$
+MyMail.Body = MyBodyText
+
+'Add Attachments
+MyMail.Attachments.Add "J:\Share\Department Phone Lists\" & Attachment1 & DatePart & ".pdf", olByValue, 2, Attachment1
+MyMail.Attachments.Add "J:\Share\Department Phone Lists\" & Attachment2 & DatePart & ".pdf", olByValue, 2, Attachment2
+
+' To briefly describe:
+' "c:myfile.txt" = the file you want to attach
+'
+' olByVaue = how to pass the file. olByValue attaches it, olByReference creates a shortcut.
+' 
+' 1 = the position in the outlook message where to attachment goes. 
+
+
+'Send the email
+MyMail.Send
+
+'Close up
+Set MyMail = Nothing
+Set MyOutlook = Nothing
+Set MailList = Nothing
+Set Db = Nothing
+
+End Function
